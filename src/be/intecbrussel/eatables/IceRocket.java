@@ -9,7 +9,6 @@ public class IceRocket implements Eatable {
     // methods
     @Override
     public void eat() {
-        System.out.println("Ahh this is good with all this heat. I'm eating " +
-                                   "an Icerocket.");
+        System.out.println("Eating an IceRocket.");
     }
 }

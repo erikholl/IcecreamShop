@@ -3,51 +3,70 @@ package be.intecbrussel.eatables;
 public class Magnum implements Eatable {
 
     // variables
-    private MagnumType type;
+    private final MagnumType TYPE; // final as MagnumType = enum (fixed, below)
 
     // constructors
     public Magnum() {
-        this(MagnumType.ALPINENUTS);
+        this(MagnumType.BLACKCHOCOLATE);
     }
 
     public Magnum(MagnumType type) {
-        this.type = type;
+        this.TYPE = type;
     }
 
     // methods
-    public MagnumType getType() {
-        return type;
+    public MagnumType getTYPE() {
+        return TYPE;
     }
 
     @Override
     public void eat() {
-        System.out.println("How delicious... I'm eating a " + type + " Magnum" +
-                                   ".");
+        System.out.println("Eating a " + getTYPE() + ".");
     }
 
-    // nested enum
+    // nested enum MagnumType
     public enum MagnumType {
-        ALPINENUTS(1.5),
-        BLACKCHOCOLATE(1),
-        MILKCHOCOLATE(1.25),
-        ROMANTICSSTRAWBERRIES(2),
-        WHITECHOCOLATE(1);
+        ALPINENUTS(1.5) {
+            public String toString() {
+                return "Magnum alpine nuts";
+            }
+        },
+        BLACKCHOCOLATE(1) {
+            public String toString() {
+                return "Magnum black chocolate";
+            }
+        },
+        MILKCHOCOLATE(1.25) {
+            public String toString() {
+                return "Magnum milk chocolate";
+            }
+        },
+        ROMANTICSTRAWBERRIES(2) {
+            public String toString() {
+                return "Magnum romantic strawberry";
+            }
+        },
+        WHITECHOCOLATE(1.25) {
+            public String toString() {
+                return "Magnum white chocolate";
+            }
+        };
 
-        private double value;
+        private double standardPriceMultiplier;
 
-        // constructor
-        MagnumType(double value) {
-            setValue(value);
+        // constructor enum
+        MagnumType(double multiplier) {
+            setStandardPriceMultiplier(multiplier);
         }
 
-        // setter
-        public void setValue(double value) {
-            this.value = value;
+        // setter enum
+        public void setStandardPriceMultiplier(double standardPriceMultiplier) {
+            this.standardPriceMultiplier = standardPriceMultiplier;
         }
 
-        // getter
-        public double getValue() {
-            return value;
+        // getter enum
+        public double getStandardPriceMultiplier() {
+            return standardPriceMultiplier;
         }
     }
 

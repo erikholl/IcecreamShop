@@ -1,2 +1,3 @@
 # Project exclude paths
 /out/
+/src/be/intecbrussel/application/OwnTestApp.java

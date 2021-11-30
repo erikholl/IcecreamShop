@@ -1,19 +1,15 @@
 package be.intecbrussel.application;
 
-import be.intecbrussel.eatables.Cone;
-import be.intecbrussel.eatables.IceRocket;
-import be.intecbrussel.eatables.Magnum;
+import be.intecbrussel.eatables.*;
 import be.intecbrussel.sellers.IceCreamCar;
-//import be.intecbrussel.sellers.IceCreamSeller;
+import be.intecbrussel.sellers.IceCreamSeller;
 import be.intecbrussel.sellers.PriceList;
 import be.intecbrussel.sellers.Stock;
 
-import static be.intecbrussel.eatables.Cone.Flavor.CHOCOLATE;
-import static be.intecbrussel.eatables.Cone.Flavor.VANILLA;
+import static be.intecbrussel.eatables.Cone.Flavor.*;
+import static be.intecbrussel.eatables.Magnum.MagnumType.*;
 
-// TODO: Eatable array
 // TODO: proper implementation of exception
-// TODO: can the order methods be simplified when calling them?
 
 public class IceCreamCarDemo {
 
@@ -21,30 +17,29 @@ public class IceCreamCarDemo {
         
         // create instances of
         PriceList priceListMariosIceKart = new PriceList(0.9, 2, 2.5);
-        Stock stockMariosIceKart = new Stock(1, 3, 5, 2);
-        IceCreamCar mariosIceKart = new IceCreamCar(priceListMariosIceKart,
-                                                 stockMariosIceKart); // use
-        // IceCreamSeller instead?
+        Stock stockMariosIceKart = new Stock(3, 4, 5, 1);
+        IceCreamSeller mariosIceKart = new IceCreamCar(priceListMariosIceKart,
+                                                 stockMariosIceKart);
 
         // order ice cream
-        IceRocket rocket1 = mariosIceKart.orderIceRocket();
-        IceRocket rocket2 = mariosIceKart.orderIceRocket();
-        Magnum magnum1 =
-                mariosIceKart.orderMagnum(Magnum.MagnumType.BLACKCHOCOLATE);
-        Magnum magnum2 =
-                mariosIceKart.orderMagnum(Magnum.MagnumType.WHITECHOCOLATE);
-        Magnum magnum3 = mariosIceKart.orderMagnum(Magnum.MagnumType.ALPINENUTS);
-        Cone cone1 = mariosIceKart.orderCone(new Cone.Flavor[]{VANILLA, CHOCOLATE});
+        IceRocket r1 = mariosIceKart.orderIceRocket();
+        IceRocket r2 = mariosIceKart.orderIceRocket();
+        Magnum m1 =
+                mariosIceKart.orderMagnum(BLACKCHOCOLATE);
+        Magnum m2 =
+                mariosIceKart.orderMagnum(WHITECHOCOLATE);
+        Magnum m3 = mariosIceKart.orderMagnum(ALPINENUTS);
+        Cone c1 = mariosIceKart.orderCone(new Cone.Flavor[]{VANILLA, CHOCOLATE});
+        Cone c2 = mariosIceKart.orderCone(new Cone.Flavor[0]);
         
         // apply 'eat' method 
-        rocket1.eat();
-        rocket2.eat();
-        magnum1.eat();
-        magnum2.eat();
-        magnum3.eat();
-        cone1.eat();
+        Eatable[] eatables = {r1, r2, m1, m2, m3, c1, c2};
+        for (Eatable icecream : eatables) {
+            icecream.eat();
+        }
         
         // check profit
+        System.out.println(mariosIceKart);
         System.out.println(mariosIceKart.getProfit());
     }
 }

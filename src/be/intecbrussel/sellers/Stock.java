@@ -20,6 +20,7 @@ public class Stock {
         setCones(cones);
     }
 
+    // setters, getters
     public void setIceRockets(int iceRockets) {
         this.iceRockets = iceRockets;
     }

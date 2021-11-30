@@ -1,17 +1,19 @@
 package be.intecbrussel.sellers;
 
-import be.intecbrussel.eatables.Cone;
-import be.intecbrussel.eatables.IceRocket;
-import be.intecbrussel.eatables.Magnum;
+import be.intecbrussel.eatables.*;
 
 public class IceCreamCar implements IceCreamSeller {
-
     // variables
     private PriceList priceList = new PriceList();
     private Stock stock = new Stock();
-    private double profit = 0;
+    private double profit;
 
-    // constructor
+    // constructors
+
+    public IceCreamCar() {
+        this(new PriceList(), new Stock());
+    }
+
     public IceCreamCar(PriceList priceList, Stock stock) {
         this.priceList = priceList;
         this.stock = stock;
@@ -20,26 +22,37 @@ public class IceCreamCar implements IceCreamSeller {
     // TODO: extend cone methods to make diff between cones / balls shortage
     @Override
     public Cone orderCone(Cone.Flavor[] flavors) {
-        Cone yourCone = prepareCone(flavors);
-
-        if (yourCone == null) {
-            throw new NoMoreIcecreamException("Out of Cones");
-        } else return yourCone;
+//        if (yourCone == null) {
+//            throw new NoMoreIcecreamException("Out of Cones");
+//        } else
+        return prepareCone(flavors);
     }
 
     private Cone prepareCone(Cone.Flavor[] flavors) {
         int stockCones = stock.getCones();
         int stockBalls = stock.getBalls();
-
-        if (stockCones >= 1 && stockBalls >= flavors.length) {
-            Cone yourCone = new Cone(flavors);
-            profit =
-                    profit + (flavors.length * (0.5 * priceList.getBallPrice()));
-            stock.setCones(stockCones - 1);
-            stock.setBalls(stockBalls - flavors.length);
-            return yourCone;
-        } else return null;
+        try {
+            if (stockCones < 1) {
+                throw new NoMoreIcecreamException("no more cones");
+            }
+        } catch (NoMoreIcecreamException noIceMessage) {
+            System.out.println(noIceMessage);
+        }
+        Cone yourCone = new Cone(flavors);
+        stock.setCones(stockCones - 1);
+        profit += flavors.length * priceList.getBallPrice();
+        return yourCone;
     }
+
+//        if (stockCones >= 1 && stockBalls >= flavors.length) {
+//            Cone yourCone = new Cone(flavors);
+//            profit =
+//                    profit + (flavors.length * (0.5 * priceList.getBallPrice()));
+//            stock.setCones(stockCones - 1);
+//            stock.setBalls(stockBalls - flavors.length);
+//            return yourCone;
+//        } else
+//            return null;
 
     @Override
     public IceRocket orderIceRocket() {
@@ -47,7 +60,8 @@ public class IceCreamCar implements IceCreamSeller {
 
         if (yourRocket == null) {
             throw new NoMoreIcecreamException("Out of IceRockets");
-        } else return yourRocket;
+        } else
+            return yourRocket;
     }
 
     private IceRocket prepareRocket() {
@@ -58,7 +72,8 @@ public class IceCreamCar implements IceCreamSeller {
             profit = profit + (0.4 * priceList.getRocketPrice());
             stock.setIceRockets(stockIceRockets - 1);
             return yourRocket;
-        } else return null;
+        } else
+            return null;
     }
 
     // TODO?? relate stock to magnum type??
@@ -68,7 +83,8 @@ public class IceCreamCar implements IceCreamSeller {
 
         if (yourMagnum == null) {
             throw new NoMoreIcecreamException("Out of Magni");
-        } else return yourMagnum;
+        } else
+            return yourMagnum;
     }
 
     private Magnum prepareMagnum(Magnum.MagnumType type) {
@@ -76,10 +92,11 @@ public class IceCreamCar implements IceCreamSeller {
 
         if (stockMagnum >= 1) {
             Magnum yourMagnum = new Magnum(type);
-            profit = profit + (0.5 * priceList.getMagnumPrice(type));
+            profit += priceList.getMagnumPrice(type);
             stock.setMagni(stockMagnum - 1);
             return yourMagnum;
-        } else return null;
+        } else
+            return null;
     }
 
     @Override
@@ -87,9 +104,14 @@ public class IceCreamCar implements IceCreamSeller {
         return profit;
     }
 
-    // TODO: proper override toString
     @Override
     public String toString() {
-        return "IceCreamCar";
+        return String.format("Welcome to my ice cream kart. Prices are %.2f " +
+                                     "for a normal Magnum, %.2f for 1 ball " +
+                                     "and %.2f for an IceRocket.",
+                             priceList.getMagnumPrice(
+                                     Magnum.MagnumType.BLACKCHOCOLATE),
+                             priceList.getBallPrice(),
+                             priceList.getRocketPrice());
     }
 }
