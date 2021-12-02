@@ -4,34 +4,37 @@ import be.intecbrussel.eatables.Magnum;
 
 public class PriceList {
 
-    // variables
     private double ballPrice;
     private double rocketPrice;
     private double magnumStandardPrice;
 
-    // constructors
     public PriceList() {
-        this(1, 1, 1);
+        this(0, 0, 0);
     }
 
     public PriceList(double ballPrice, double rocketPrice,
-                     double magnumStandardPrice) {
+                     double magnumStandardPrice) throws NegativePriceOrStockException {
         setBallPrice(ballPrice);
         setRocketPrice(rocketPrice);
         setMagnumStandardPrice(magnumStandardPrice);
     }
 
-    // methods
-    public void setBallPrice(double ballPrice) {
-        this.ballPrice = ballPrice;
+    public void setBallPrice(double ballPrice) throws NegativePriceOrStockException {
+        if (ballPrice < 0) throw new NegativePriceOrStockException(
+                "negative ballPrice not allowed.");
+        else this.ballPrice = ballPrice;
     }
 
-    public void setRocketPrice(double rocketPrice) {
-        this.rocketPrice = rocketPrice;
+    public void setRocketPrice(double rocketPrice) throws NegativePriceOrStockException {
+        if (rocketPrice < 0) throw new NegativePriceOrStockException(
+                "negative rocketPrice not allowed.");
+        else this.rocketPrice = rocketPrice;
     }
 
-    public void setMagnumStandardPrice(double magnumStandardPrice) {
-        this.magnumStandardPrice = magnumStandardPrice;
+    public void setMagnumStandardPrice(double magnumStandardPrice) throws NegativePriceOrStockException {
+        if (magnumStandardPrice < 0) throw new NegativePriceOrStockException(
+                "negative magnumStandardPrice not allowed.");
+        else this.magnumStandardPrice = magnumStandardPrice;
     }
 
     public double getBallPrice() {

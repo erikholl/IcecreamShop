@@ -2,39 +2,64 @@ package be.intecbrussel.sellers;
 
 public class Stock {
 
-    // variables
     private int iceRockets;
     private int cones;
     private int balls;
     private int magni;
 
-    // constructors
     public Stock() {
         this(0, 0, 0, 0);
     }
 
-    public Stock(int iceRockets, int magni, int balls, int cones) {
+    public Stock(int iceRockets, int magni, int balls,
+                 int cones) throws NegativePriceOrStockException {
         setIceRockets(iceRockets);
         setMagni(magni);
         setBalls(balls);
         setCones(cones);
     }
 
-    // setters, getters
-    public void setIceRockets(int iceRockets) {
-        this.iceRockets = iceRockets;
+    public void setIceRockets(
+            int iceRockets) throws NegativePriceOrStockException {
+        if (iceRockets < 0)
+            throw new NegativePriceOrStockException("negative" +
+                                                            " IceRocket stock not allowed.");
+        else
+            this.iceRockets = iceRockets;
     }
 
-    public void setMagni(int magni) {
-        this.magni = magni;
+    public void setMagni(int magni) throws NegativePriceOrStockException {
+        if (magni < 0)
+            throw new NegativePriceOrStockException("negative " +
+                                                            "Magni" +
+                                                            " " +
+                                                            "stock" +
+                                                            " not " +
+                                                            "allowed");
+        else
+            this.magni = magni;
     }
 
-    public void setBalls(int balls) {
-        this.balls = balls;
+    public void setBalls(int balls) throws NegativePriceOrStockException {
+        if (balls < 0)
+            throw new NegativePriceOrStockException("negative ball" +
+                                                            " " +
+                                                            "stock" +
+                                                            " not " +
+                                                            "allowed.");
+        else
+            this.balls = balls;
     }
 
-    public void setCones(int cones) {
-        this.cones = cones;
+    public void setCones(int cones) throws NegativePriceOrStockException {
+        if (cones < 0)
+            throw new NegativePriceOrStockException("negative cone" +
+                                                            " " +
+                                                            "stock" +
+                                                            " not " +
+                                                            "allowed.");
+        else
+            this.cones = cones;
     }
 
     public int getIceRockets() {

@@ -6,11 +6,9 @@ import be.intecbrussel.eatables.Magnum;
 
 public class IceCreamSalon implements IceCreamSeller {
 
-    // variables
     private PriceList priceList;
     private double totalProfit;
 
-    // constructors
     public IceCreamSalon() {
         this(new PriceList());
     }
@@ -24,6 +22,7 @@ public class IceCreamSalon implements IceCreamSeller {
     public Cone orderCone(Cone.Flavor[] flavors) {
         Cone yourCone = new Cone(flavors);
         totalProfit += flavors.length * priceList.getBallPrice();
+        System.out.println(yourCone + " ordered!");
         return yourCone;
     }
 
@@ -31,6 +30,7 @@ public class IceCreamSalon implements IceCreamSeller {
     public IceRocket orderIceRocket() {
         IceRocket yourRocket = new IceRocket();
         totalProfit += priceList.getRocketPrice();
+        System.out.println(yourRocket + " ordered!");
         return yourRocket;
     }
 
@@ -38,6 +38,7 @@ public class IceCreamSalon implements IceCreamSeller {
     public Magnum orderMagnum(Magnum.MagnumType type) {
         Magnum yourMagnum = new Magnum(type);
         totalProfit += priceList.getMagnumPrice(type);
+        System.out.println(yourMagnum + " ordered!");
         return yourMagnum;
     }
 
@@ -48,11 +49,12 @@ public class IceCreamSalon implements IceCreamSeller {
 
     @Override
     public String toString() {
-        return String.format("Hello. In this ice cream salon prices are: %.2f" +
+        return String.format("\nHello. In this ice cream salon prices are: %" +
+                                     ".2f" +
                                      " for an IceRocket, %.2f for a normal " +
                                      "Magnum and %.2f for 1 ball if ice cream" +
                                      " (more balls is however strongly " +
-                                     "recommended).",
+                                     "recommended).\n",
                              priceList.getRocketPrice(),
                              priceList.getMagnumPrice(
                                      Magnum.MagnumType.BLACKCHOCOLATE),

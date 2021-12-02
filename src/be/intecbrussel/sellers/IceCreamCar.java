@@ -3,12 +3,10 @@ package be.intecbrussel.sellers;
 import be.intecbrussel.eatables.*;
 
 public class IceCreamCar implements IceCreamSeller {
-    // variables
-    private PriceList priceList = new PriceList();
-    private Stock stock = new Stock();
-    private double profit;
 
-    // constructors
+    private PriceList priceList;
+    private Stock stock;
+    private double profit;
 
     public IceCreamCar() {
         this(new PriceList(), new Stock());
@@ -19,84 +17,89 @@ public class IceCreamCar implements IceCreamSeller {
         this.stock = stock;
     }
 
-    // TODO: extend cone methods to make diff between cones / balls shortage
     @Override
-    public Cone orderCone(Cone.Flavor[] flavors) {
-//        if (yourCone == null) {
-//            throw new NoMoreIcecreamException("Out of Cones");
-//        } else
-        return prepareCone(flavors);
+    public Cone orderCone(
+            Cone.Flavor[] flavors) throws NoMoreIcecreamException {
+
+        try {
+            return prepareCone(flavors);
+        } catch (NoMoreIcecreamException nmie) {
+            System.out.println("Missing in stock: " + nmie.getMessage());
+            return null;    // exception thrown, return null for orderCone;
+                            // null will be used in app to remove from eatables
+        }
     }
 
     private Cone prepareCone(Cone.Flavor[] flavors) {
         int stockCones = stock.getCones();
         int stockBalls = stock.getBalls();
-        try {
-            if (stockCones < 1) {
-                throw new NoMoreIcecreamException("no more cones");
-            }
-        } catch (NoMoreIcecreamException noIceMessage) {
-            System.out.println(noIceMessage);
+
+        if (stockCones == 0) {
+            throw new NoMoreIcecreamException("No more cones. Sorry!");
+        } else if (stockBalls == 0) {
+            throw new NoMoreIcecreamException("No more balls. Sorry!");
+        } else if (stockBalls < flavors.length) {
+            throw new NoMoreIcecreamException(
+                    "We only have " + stockBalls + " balls left. You ordered " + flavors.length + " balls.");
+        } else {
+            Cone yourCone = new Cone(flavors);
+            stock.setCones(stockCones - 1);
+            stock.setBalls(stockBalls - flavors.length);
+            profit += flavors.length * priceList.getBallPrice();
+            System.out.println(yourCone + " ordered!");
+            return yourCone;
         }
-        Cone yourCone = new Cone(flavors);
-        stock.setCones(stockCones - 1);
-        profit += flavors.length * priceList.getBallPrice();
-        return yourCone;
     }
 
-//        if (stockCones >= 1 && stockBalls >= flavors.length) {
-//            Cone yourCone = new Cone(flavors);
-//            profit =
-//                    profit + (flavors.length * (0.5 * priceList.getBallPrice()));
-//            stock.setCones(stockCones - 1);
-//            stock.setBalls(stockBalls - flavors.length);
-//            return yourCone;
-//        } else
-//            return null;
-
     @Override
-    public IceRocket orderIceRocket() {
-        IceRocket yourRocket = prepareRocket();
+    public IceRocket orderIceRocket() throws NoMoreIcecreamException {
 
-        if (yourRocket == null) {
-            throw new NoMoreIcecreamException("Out of IceRockets");
-        } else
-            return yourRocket;
+        try {
+            return prepareRocket();
+        } catch (NoMoreIcecreamException nmie) {
+            System.out.println("Missing in stock: " + nmie.getMessage());
+            return null;    // see null explanation at orderCone
+        }
     }
 
     private IceRocket prepareRocket() {
         int stockIceRockets = stock.getIceRockets();
 
-        if (stockIceRockets >= 1) {
+        if (stockIceRockets == 0) {
+            throw new NoMoreIcecreamException("No more IceRockets. Sorry!");
+        } else {
             IceRocket yourRocket = new IceRocket();
-            profit = profit + (0.4 * priceList.getRocketPrice());
+            profit += priceList.getRocketPrice();
             stock.setIceRockets(stockIceRockets - 1);
+            System.out.println(yourRocket + " ordered!");
             return yourRocket;
-        } else
-            return null;
+        }
     }
 
-    // TODO?? relate stock to magnum type??
     @Override
-    public Magnum orderMagnum(Magnum.MagnumType type) {
-        Magnum yourMagnum = prepareMagnum(type);
+    public Magnum orderMagnum(
+            Magnum.MagnumType type) throws NoMoreIcecreamException {
 
-        if (yourMagnum == null) {
-            throw new NoMoreIcecreamException("Out of Magni");
-        } else
-            return yourMagnum;
+        try {
+            return prepareMagnum(type);
+        } catch (NoMoreIcecreamException nmie) {
+            System.out.println("Missing in stock: " + nmie.getMessage());
+            return null; // see null explanation at orderCone
+        }
     }
 
     private Magnum prepareMagnum(Magnum.MagnumType type) {
         int stockMagnum = stock.getMagni();
 
-        if (stockMagnum >= 1) {
+        if (stockMagnum < 1) {
+            throw new NoMoreIcecreamException("No more Magnums. Sorry!");
+        } else {
             Magnum yourMagnum = new Magnum(type);
             profit += priceList.getMagnumPrice(type);
             stock.setMagni(stockMagnum - 1);
+            System.out.println(yourMagnum + " ordered!");
             return yourMagnum;
-        } else
-            return null;
+        }
     }
 
     @Override
@@ -106,12 +109,16 @@ public class IceCreamCar implements IceCreamSeller {
 
     @Override
     public String toString() {
-        return String.format("Welcome to my ice cream kart. Prices are %.2f " +
-                                     "for a normal Magnum, %.2f for 1 ball " +
-                                     "and %.2f for an IceRocket.",
-                             priceList.getMagnumPrice(
-                                     Magnum.MagnumType.BLACKCHOCOLATE),
-                             priceList.getBallPrice(),
-                             priceList.getRocketPrice());
+        return String.format(
+                "\nWelcome to Mario's ice cream kart. Prices are %.2f " +
+                        "for a normal Magnum, %.2f for 1 ball " +
+                        "and %.2f for an IceRocket. \nCurrent stock: %d " +
+                        "Magnum(s), %d ball(s) of ice, %d cone(s) and %d " +
+                        "IceRocket(s).\n",
+                priceList.getMagnumPrice(Magnum.MagnumType.BLACKCHOCOLATE),
+                priceList.getBallPrice(), priceList.getRocketPrice(),
+                stock.getMagni(), stock.getBalls(), stock.getCones(),
+                stock.getIceRockets());
     }
+
 }

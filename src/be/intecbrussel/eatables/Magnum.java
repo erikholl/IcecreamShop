@@ -2,11 +2,9 @@ package be.intecbrussel.eatables;
 
 public class Magnum implements Eatable {
 
-    // variables
     private final MagnumType TYPE; // final as MagnumType = enum (fixed, below)
 
-    // constructors
-    public Magnum() {
+    public Magnum() { // default Magnum constructor
         this(MagnumType.BLACKCHOCOLATE);
     }
 
@@ -14,17 +12,21 @@ public class Magnum implements Eatable {
         this.TYPE = type;
     }
 
-    // methods
     public MagnumType getTYPE() {
         return TYPE;
     }
 
     @Override
     public void eat() {
-        System.out.println("Eating a " + getTYPE() + ".");
+        System.out.println("Eating a " + this + ".");
     }
 
-    // nested enum MagnumType
+    @Override
+    public String toString() {
+        return String.valueOf(getTYPE());
+    }
+
+    // nested enum MagnumType - incl. override toString per type
     public enum MagnumType {
         ALPINENUTS(1.5) {
             public String toString() {
@@ -59,12 +61,12 @@ public class Magnum implements Eatable {
             setStandardPriceMultiplier(multiplier);
         }
 
-        // setter enum
+        // setter price multiplier
         public void setStandardPriceMultiplier(double standardPriceMultiplier) {
             this.standardPriceMultiplier = standardPriceMultiplier;
         }
 
-        // getter enum
+        // getter price multiplier
         public double getStandardPriceMultiplier() {
             return standardPriceMultiplier;
         }
